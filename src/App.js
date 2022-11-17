@@ -1,40 +1,14 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import Content from "./Content";
 
 
-
+//Mounted & Unmounted
 function App() {
-  const [job,setJob] = useState('')
-  const [jobs,setJobs] = useState(() => {
-    const storageJobs = JSON.parse(localStorage.getItem('jobs'))
-    console.log(storageJobs)
-    return storageJobs
-  })
-
-  const handleSubmit = () => {
-    setJobs(prev => {
-      const newJobs = [...prev,job]
-
-      //Save to DB
-      const jsonJobs = JSON.stringify(newJobs)
-      localStorage.setItem('jobs',jsonJobs)
-        console.log(newJobs)
-        return newJobs
-    })
-    setJob('')
-  }
-
+  const [show, setShow] = useState(false)
 return (
   <div style={{padding:32}}>
-    <input 
-      value={job}
-      onChange={e => setJob(e.target.value)}
-    />
-    <button onClick={handleSubmit}>Add</button>
-    <ul>
-        {jobs.map((job,index) => (
-          <li key={index}>{job}</li>
-        ))}
-    </ul>
+    <button onClick={() => setShow(!show)}>Toggle</button>
+      {show && <Content />}
   </div>
 )
 }
