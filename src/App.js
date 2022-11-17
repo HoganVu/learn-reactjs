@@ -1,18 +1,41 @@
-import React from "react";
+import React, { useState } from "react";
 
-class ShoppingList extends React.Component {
-  render() {
-    return (
-      <div className="shopping-list">
-        <h1>Shopping List for {this.props.name}</h1>
-        <ul>
-          <li>Instagram</li>
-          <li>WhatsApp</li>
-          <li>Oculus</li>
-        </ul>
-      </div>
-    );
+
+
+function App() {
+  const [job,setJob] = useState('')
+  const [jobs,setJobs] = useState(() => {
+    const storageJobs = JSON.parse(localStorage.getItem('jobs'))
+    console.log(storageJobs)
+    return storageJobs
+  })
+
+  const handleSubmit = () => {
+    setJobs(prev => {
+      const newJobs = [...prev,job]
+
+      //Save to DB
+      const jsonJobs = JSON.stringify(newJobs)
+      localStorage.setItem('jobs',jsonJobs)
+        console.log(newJobs)
+        return newJobs
+    })
+    setJob('')
   }
-}
 
-export default ShoppingList;
+return (
+  <div style={{padding:32}}>
+    <input 
+      value={job}
+      onChange={e => setJob(e.target.value)}
+    />
+    <button onClick={handleSubmit}>Add</button>
+    <ul>
+        {jobs.map((job,index) => (
+          <li key={index}>{job}</li>
+        ))}
+    </ul>
+  </div>
+)
+}
+export default App;
